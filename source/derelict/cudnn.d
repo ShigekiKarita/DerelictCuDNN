@@ -39,7 +39,7 @@ private
             "int", "int", "int", "int"],
         ["cudnnGetTensor4dDescriptor", "const cudnnTensorDescriptor_t", "cudnnDataType_t *", "int *", "int *", "int *",
             "int *", "int *", "int *", "int *", "int *"],
-        ["cudnnSetTensorNdDescriptor", "cudnnTensorDescriptor_t", "cudnnDataType_t", "int", "int *", "int *"],
+        ["cudnnSetTensorNdDescriptor", "cudnnTensorDescriptor_t", "cudnnDataType_t", "int", "const int *", "const int *"],
         ["cudnnGetTensorNdDescriptor", "const cudnnTensorDescriptor_t", "int", "cudnnDataType_t *", "int *", "int* ",
             "int* "],
         ["cudnnDestroyTensorDescriptor", "cudnnTensorDescriptor_t"],
@@ -68,9 +68,9 @@ private
         ["cudnnGetFilter4dDescriptor", "cudnnDataType_t *", "cudnnTensorFormat_t *", "int *", "int *", "int *",
 			"int *"],
         ["cudnnSetFilterNdDescriptor", "cudnnFilterDescriptor_t", "cudnnDataType_t", "cudnnTensorFormat_t", "int",
-            "const int[]"],
+            "const int*"],
         ["cudnnGetFilterNdDescriptor", "const cudnnFilterDescriptor_t", "int", "cudnnDataType_t *",
-            "cudnnTensorFormat_t *", "int *", "int[]"],
+            "cudnnTensorFormat_t *", "int *", "int *"],
         ["cudnnDestroyFilterDescriptor", "cudnnFilterDescriptor_t"],
         ["cudnnCreateConvolutionDescriptor", "cudnnConvolutionDescriptor_t *"],
         ["cudnnSetConvolution2dDescriptor", "cudnnConvolutionDescriptor_t", "int", "int", "int", "int", "int", "int",
@@ -83,12 +83,12 @@ private
         // "int *", "int *", "int *", "cudnnConvolutionMode_t *", "cudnnDataType_t *"],
         ["cudnnGetConvolution2dForwardOutputDim", "const cudnnConvolutionDescriptor_t",
             "const cudnnTensorDescriptor_t", "const cudnnFilterDescriptor_t", "int", "int", "int", "int"],
-        ["cudnnSetConvolutionNdDescriptor", "cudnnConvolutionDescriptor_t", "int", "const int[]", "const int[]",
-            "const int[]", "cudnnConvolutionMode_t", "cudnnDataType_t"],
-        ["cudnnGetConvolutionNdDescriptor", "const cudnnConvolutionDescriptor_t", "int", "int *", "int[]", "int[]",
-            "int[]", "cudnnConvolutionMode_t *", "cudnnDataType_t *"],
+        ["cudnnSetConvolutionNdDescriptor", "cudnnConvolutionDescriptor_t", "int", "const int*", "const int*",
+            "const int*", "cudnnConvolutionMode_t", "cudnnDataType_t"],
+        ["cudnnGetConvolutionNdDescriptor", "const cudnnConvolutionDescriptor_t", "int", "int *", "int*", "int*",
+            "int*", "cudnnConvolutionMode_t *", "cudnnDataType_t *"],
         ["cudnnGetConvolutionNdForwardOutputDim", "const cudnnConvolutionDescriptor_t",
-            "const cudnnTensorDescriptor_t", "const cudnnFilterDescriptor_t", "int", "int[]"],
+            "const cudnnTensorDescriptor_t", "const cudnnFilterDescriptor_t", "int", "int*"],
         ["cudnnDestroyConvolutionDescriptor", "cudnnConvolutionDescriptor_t"],
 
         
@@ -167,11 +167,11 @@ private
         ["cudnnGetPooling2dDescriptor", "const cudnnPoolingDescriptor_t", "cudnnPoolingMode_t *",
             "cudnnNanPropagation_t *", "int *", "int *", "int *", "int *", "int *", "int *"],
         ["cudnnSetPoolingNdDescriptor", "cudnnPoolingDescriptor_t", "const cudnnPoolingMode_t",
-            "const cudnnNanPropagation_t", "int", "const int[]", "const int[]", "const int[]"],
+            "const cudnnNanPropagation_t", "int", "const int*", "const int*", "const int*"],
         ["cudnnGetPoolingNdDescriptor", "cudnnPoolingDescriptor_t", "int", "cudnnPoolingMode_t *",
-            "cudnnNanPropagation_t *", "int *", "int[]", "int[]", "int[]"],
+            "cudnnNanPropagation_t *", "int *", "int*", "int*", "int*"],
         ["cudnnGetPoolingNdForwardOutputDim", "const cudnnPoolingDescriptor_t", "const cudnnTensorDescriptor_t",
-            "int", "int[]"],
+            "int", "int*"],
         ["cudnnGetPooling2dForwardOutputDim", "const cudnnPoolingDescriptor_t", "const cudnnTensorDescriptor_t",
             "int *", "int *", "int *", "int *"],
         ["cudnnDestroyPoolingDescriptor", "cudnnPoolingDescriptor_t"],
@@ -236,7 +236,7 @@ private
 
         ["cudnnCreateSpatialTransformerDescriptor", "cudnnSpatialTransformerDescriptor_t *"],
         ["cudnnSetSpatialTransformerNdDescriptor", "cudnnSpatialTransformerDescriptor_t", "cudnnSamplerType_t",
-            "cudnnDataType_t", "const int", "const int[]"],
+            "cudnnDataType_t", "const int", "const int*"],
         ["cudnnDestroySpatialTransformerDescriptor", "cudnnSpatialTransformerDescriptor_t"],
         ["cudnnSpatialTfGridGeneratorForward", "cudnnHandle_t", "const cudnnSpatialTransformerDescriptor_t",
             "const void *", "void *"],
@@ -280,27 +280,40 @@ private
         ["cudnnGetRNNLinLayerBiasParams", "cudnnHandle_t", "const cudnnRNNDescriptor_t", "const int",
             "const cudnnTensorDescriptor_t", "const cudnnFilterDescriptor_t", "const void *", "const int",
             "cudnnFilterDescriptor_t", "void **"],
-        ["cudnnRNNForwardInference", "cudnnHandle_t", "const cudnnRNNDescriptor_t", "const int",
-            "const cudnnTensorDescriptor_t *", "const void *", "const cudnnTensorDescriptor_t", "const void *",
-            "const void *", "const cudnnTensorDescriptor_t", "const void *", "const cudnnFilterDescriptor_t",
-            "const void *", "const cudnnTensorDescriptor_t *", "void *", "const cudnnTensorDescriptor_t", "void *",
-            "const cudnnTensorDescriptor_t", "void *", "void *", "size_t"],
+        ["cudnnRNNForwardInference", "cudnnHandle_t", "const cudnnRNNDescriptor_t", "const int", /* seqLength */
+         "const cudnnTensorDescriptor_t *" /* xDesc */,  "const void *" /* x */,
+         "const cudnnTensorDescriptor_t" /* hxDesc */, "const void *" /* hx */,
+         "const cudnnTensorDescriptor_t" /* cxDesc*/,"const void *" /* cx */,
+         "const cudnnFilterDescriptor_t" /* wDesc */, "const void *" /* w */,
+         "const cudnnTensorDescriptor_t *" /* yDesc */, "void *" /* y */,
+         "const cudnnTensorDescriptor_t" /* hyDesc */, "void *" /* hy */,
+         "const cudnnTensorDescriptor_t" /* cyDesc */, "void *" /* cy */,
+         "void *" /* workspace */, "size_t" /* workSpaceSizeInBytes */],
         ["cudnnRNNForwardTraining", "cudnnHandle_t", "const cudnnRNNDescriptor_t", "const int",
-            "const cudnnTensorDescriptor_t *", "const void *", "const cudnnTensorDescriptor_t", "const void *",
-            "const cudnnTensorDescriptor_t", "const void *", "const cudnnFilterDescriptor_t", "const void *",
-            "const cudnnTensorDescriptor_t *", "void *", "const cudnnTensorDescriptor_t", "void *",
-            "const cudnnTensorDescriptor_t", "void *", "void *", "size_t", "void *", "size_t"],
+         "const cudnnTensorDescriptor_t *", "const void *", // x
+         "const cudnnTensorDescriptor_t", "const void *", // hx
+         "const cudnnTensorDescriptor_t", "const void *", // cx
+         "const cudnnFilterDescriptor_t", "const void *", // w
+         "const cudnnTensorDescriptor_t *", "void *", // y
+         "const cudnnTensorDescriptor_t", "void *", // hy
+         "const cudnnTensorDescriptor_t", "void *", // cy
+         "void *", "size_t", // workspace
+         "void *", "size_t"], // reserve
         ["cudnnRNNBackwardData", "cudnnHandle_t", "const cudnnRNNDescriptor_t", "const int",
-            "const cudnnTensorDescriptor_t *", "const void *", "const cudnnTensorDescriptor_t *", "const void *",
+         "const cudnnTensorDescriptor_t *", "const void *", // 
+         "const cudnnTensorDescriptor_t *", "const void *",
             "const cudnnTensorDescriptor_t", "const void *", "const cudnnTensorDescriptor_t", "const void *",
             "const cudnnFilterDescriptor_t", "const void *", "const cudnnTensorDescriptor_t", "const void *",
             "const cudnnTensorDescriptor_t", "const void *", "const cudnnTensorDescriptor_t *", "void *",
             "const cudnnTensorDescriptor_t", "void *", "const cudnnTensorDescriptor_t", "void *", "void *",
             "size_t", "const void *", "size_t"],
         ["cudnnRNNBackwardWeights", "cudnnHandle_t", "const cudnnRNNDescriptor_t", "const int",
-            "const cudnnTensorDescriptor_t *", "const void *", "const cudnnTensorDescriptor_t", "const void *",
-            "const cudnnTensorDescriptor_t *", "const void *", "const void *", "size_t",
-            "const cudnnFilterDescriptor_t", "void *", "const void *", "size_t"]
+         "const cudnnTensorDescriptor_t *", "const void *", // x
+         "const cudnnTensorDescriptor_t", "const void *", // hx
+         "const cudnnTensorDescriptor_t *", "const void *", // y
+         "const void *", "size_t", // workspace
+         "const cudnnFilterDescriptor_t", "void *", // dw
+         "const void *", "size_t"] // reserve
     ];
 
     string generateFunctionAliases()
