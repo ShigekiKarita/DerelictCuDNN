@@ -264,7 +264,9 @@ private
 
         ["cudnnCreateRNNDescriptor", "cudnnRNNDescriptor_t *"],
         ["cudnnDestroyRNNDescriptor", "cudnnRNNDescriptor_t"],
-        ["cudnnSetRNNDescriptor", "cudnnRNNDescriptor_t", "int", "int", "cudnnDropoutDescriptor_t",
+        ["cudnnSetRNNDescriptor_v6", "cudnnHandle_t", "cudnnRNNDescriptor_t", "const int", "const int", "cudnnDropoutDescriptor_t",
+            "cudnnRNNInputMode_t", "cudnnDirectionMode_t", "cudnnRNNMode_t", "cudnnRNNAlgo_t", "cudnnDataType_t"],
+        ["cudnnSetRNNDescriptor_v5", "cudnnRNNDescriptor_t", "int", "int", "cudnnDropoutDescriptor_t",
             "cudnnRNNInputMode_t", "cudnnDirectionMode_t", "cudnnRNNMode_t", "cudnnDataType_t"],
         ["cudnnGetRNNWorkspaceSize", "cudnnHandle_t", "const cudnnRNNDescriptor_t", "const int",
             "const cudnnTensorDescriptor_t *", "size_t *"],
@@ -589,6 +591,14 @@ enum : cudnnRNNInputMode_t
 {
     CUDNN_LINEAR_INPUT = 0,
     CUDNN_SKIP_INPUT = 1
+}
+
+alias cudnnRNNAlgo_t = int;
+enum : cudnnRNNAlgo_t
+{
+    CUDNN_RNN_ALGO_STANDARD = 0,
+    CUDNN_RNN_ALGO_PERSIST_STATIC = 1,
+    CUDNN_RNN_ALGO_PERSIST_DYNAMIC = 2
 }
 
 struct cudnnRNNStruct;
