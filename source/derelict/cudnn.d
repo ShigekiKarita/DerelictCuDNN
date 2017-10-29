@@ -7,6 +7,8 @@ module derelict.cudnn;
 import derelict.cuda.runtimeapi;
 import derelict.util.loader;
 
+enum ver = 7;
+
 private
 {
     import derelict.util.system;
@@ -73,12 +75,12 @@ private
         ["cudnnCreateConvolutionDescriptor", "cudnnConvolutionDescriptor_t *"],
         ["cudnnSetConvolution2dDescriptor", "cudnnConvolutionDescriptor_t", "int", "int", "int", "int", "int", "int",
             "cudnnConvolutionMode_t"],
-        ["cudnnSetConvolution2dDescriptor_v5", "cudnnConvolutionDescriptor_t", "int", "int", "int", "int", "int",
-            "int", "cudnnConvolutionMode_t", "cudnnDataType_t"],
+        // ["cudnnSetConvolution2dDescriptor_v5", "cudnnConvolutionDescriptor_t", "int", "int", "int", "int", "int",
+        // "int", "cudnnConvolutionMode_t", "cudnnDataType_t"],
         ["cudnnGetConvolution2dDescriptor", "const cudnnConvolutionDescriptor_t", "int *", "int *", "int *", "int *",
             "int *", "int *", "cudnnConvolutionMode_t *"],
-        ["cudnnGetConvolution2dDescriptor_v5", "const cudnnConvolutionDescriptor_t", "int *", "int *", "int *",
-            "int *", "int *", "int *", "cudnnConvolutionMode_t *", "cudnnDataType_t *"],
+        // ["cudnnGetConvolution2dDescriptor_v5", "const cudnnConvolutionDescriptor_t", "int *", "int *", "int *",
+        // "int *", "int *", "int *", "cudnnConvolutionMode_t *", "cudnnDataType_t *"],
         ["cudnnGetConvolution2dForwardOutputDim", "const cudnnConvolutionDescriptor_t",
             "const cudnnTensorDescriptor_t", "const cudnnFilterDescriptor_t", "int", "int", "int", "int"],
         ["cudnnSetConvolutionNdDescriptor", "cudnnConvolutionDescriptor_t", "int", "const int[]", "const int[]",
